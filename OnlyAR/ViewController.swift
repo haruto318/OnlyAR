@@ -132,7 +132,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     @objc private func stopOrientationButtonTapped() {
         stopOrientationRecording()
-        saveOrientationRecordsToLocalFile()
+        createFile()
     }
     
     func setupPickerView() {
@@ -753,6 +753,35 @@ extension SCNQuaternion {
 
 /// Get and Record Orientation
 extension ViewController {
+    func createFile() {
+        let fileManager = FileManager.default
+        do {
+            let currentTime = Date()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
+            let currentTimeString = dateFormatter.string(from: currentTime)
+            
+            let documentsURL = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let fileURL = documentsURL.appendingPathComponent("AR_orientationRecords_\(currentTimeString).csv")
+                    
+            // CSVファイルのヘッダー
+            var csvText = "timestamp,orientation\n"
+                    
+            // orientationRecords配列をCSV形式に変換
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            for record in orientationRecords {
+                let dateString = dateFormatter.string(from: record.timestamp)
+                csvText += "\(dateString),\(record.orientation)\n"
+            }
+                    
+            // データをファイルに書き込み
+            try csvText.write(to: fileURL, atomically: true, encoding: .utf8)
+                print("CSV file created successfully at \(fileURL.path)")
+            } catch {
+                print("Error creating CSV file: \(error.localizedDescription)")
+            }
+    }
+    
     @objc func checkOrientation() {
         let orientation = UIDevice.current.orientation
         let orientationValue = getOrientationValue(orientation)
@@ -795,31 +824,5 @@ extension ViewController {
         orientationTimer?.invalidate()
         orientationTimer = nil
         print("Orientation recording stopped.")
-    }
-    
-    func saveOrientationRecordsToLocalFile() {
-        // JSONにエンコード
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        do {
-            let data = try encoder.encode(orientationRecords)
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("Encoded JSON String: \(jsonString)")
-                
-                // JSON文字列をファイルに保存
-                let fileName = "orientationRecords.json"
-                if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-                    let fileURL = documentDirectory.appendingPathComponent(fileName)
-                    do {
-                        try jsonString.write(to: fileURL, atomically: true, encoding: .utf8)
-                        print("File saved to: \(fileURL)")
-                    } catch {
-                        print("Failed to save file: \(error)")
-                    }
-                }
-            }
-        } catch {
-            print("Failed to encode orientation records: \(error)")
-        }
     }
 }

@@ -328,6 +328,7 @@
 				DEVELOPMENT_TEAM = QC8NW9PFKL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OnlyAR/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "";
@@ -362,6 +363,7 @@
 				DEVELOPMENT_TEAM = QC8NW9PFKL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OnlyAR/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "";
